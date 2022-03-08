@@ -1,0 +1,13 @@
+TEXT header info start
+TEXT Projektname: [[PROJECT_NAME]]
+TEXT Werknummer: [[PROJECT_NUMBER]]
+TEXT Bearbeiter: [[EDITOR]]
+TEXT Datum: [[DATE]]
+TEXT header info end
+TEXT
+MODL IEC
+CALC 15 1
+OXML
+NXLS
+ONLI "value written in cloud workflow"
+TEXT
