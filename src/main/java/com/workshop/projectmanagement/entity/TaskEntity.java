@@ -4,21 +4,29 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
-@Table(name = "project")
 @Entity
-public class ProjectEntity {
+@Table(name = "task")
+public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String title;
 
     private String description;
 
-    @ManyToMany
-    private List<UserEntity> userList;
+    private Integer userPoints;
+
+    private Integer estimation;
+
+    private Status status;
+
+    @ManyToOne
+    private UserEntity user;
+    
+    @ManyToOne
+    private UserStoryEntity userStory;
 }

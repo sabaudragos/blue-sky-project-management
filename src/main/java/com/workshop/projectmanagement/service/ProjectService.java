@@ -7,8 +7,10 @@ import com.workshop.projectmanagement.dto.ProjectPatchNameDto;
 import com.workshop.projectmanagement.dto.UserDto;
 import com.workshop.projectmanagement.entity.ProjectEntity;
 import com.workshop.projectmanagement.repo.ProjectRepository;
+import com.workshop.projectmanagement.repo.UserRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +31,22 @@ public class ProjectService {
         this.userService = userService;
     }
 
+    @Transactional
     public ProjectDto createProject(ProjectDto projectDto) {
-        ProjectEntity savedProject = projectRepository.save(mapper.map(projectDto, ProjectEntity.class));
+        List<UserDto> userList = projectDto.getUserList();
+        List<UserDto> checkedUserDtoList = new ArrayList<>();
+        if (!userList.isEmpty()) {
+            List<Integer> userIdList = userList.stream()
+                    .map(UserDto::getId)
+                    .collect(Collectors.toList());
+            checkedUserDtoList = userService.ifUsersExistAddToLocalDatabase(userIdList);
+        }
+        ProjectEntity projectEntity = mapper.map(projectDto, ProjectEntity.class);
+        ProjectEntity savedProject = projectRepository.save(projectEntity);
+        
         ProjectDto savedProjectDto = mapper.map(savedProject, ProjectDto.class);
-        savedProjectDto.setUserList(fetchUserList(savedProjectDto.getUserList()));
+        
+        savedProjectDto.setUserList(checkedUserDtoList);
 
         return savedProjectDto;
     }

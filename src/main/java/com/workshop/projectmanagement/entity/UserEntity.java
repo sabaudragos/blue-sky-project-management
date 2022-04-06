@@ -13,4 +13,11 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(Integer id) {
+        this.id = id;
+    }
 }
